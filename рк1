@@ -1,0 +1,54 @@
+class Book:
+    def __init__(self, book_id, title, price, store_id):
+        self.book_id = book_id
+        self.title = title
+        self.price = price
+        self.store_id = store_id
+
+class BookStore:
+    def __init__(self, store_id, store_name):
+        self.store_id = store_id
+        self.store_name = store_name
+
+class BookInStore:
+    def __init__(self, book_id, store_id):
+        self.book_id = book_id
+        self.store_id = store_id
+
+# Тестовые данные
+books = [
+    Book(1, "Book A", 500, 1),
+    Book(2, "Book B", 300, 1),
+    Book(3, "Book C", 400, 2),
+]
+
+bookstores = [
+    BookStore(1, "Bookstore One"),
+    BookStore(2, "Bookstore Two"),
+]
+
+books_in_stores = [
+    BookInStore(1, 1),
+    BookInStore(2, 1),
+    BookInStore(3, 2),
+]
+
+# Запрос 1: Список всех связанных книг и магазинов
+result_1 = sorted([(b.title, s.store_name) for b in books for s in bookstores if b.store_id == s.store_id], key=lambda x: x[1])
+print("Запрос 1: Список всех связанных книг и магазинов:")
+for book, store in result_1:
+    print(f"Книга: {book}, Магазин: {store}")
+
+# Запрос 2: Суммарная стоимость книг в каждом магазине
+result_2 = sorted([(s.store_name, sum(b.price for b in books if b.store_id == s.store_id)) for s in bookstores], key=lambda x: x[1])
+print("\nЗапрос 2: Суммарная стоимость книг в каждом магазине:")
+for store, total_price in result_2:
+    print(f"Магазин: {store}, Суммарная стоимость книг: {total_price}")
+
+# Запрос 3: Список всех магазинов с книгами, где в названии присутствует слово 'Bookstore'
+result_3 = [(s.store_name, [b.title for b in books if b.store_id == s.store_id]) for s in bookstores if "Bookstore" in s.store_name]
+print("\nЗапрос 3: Список всех магазинов с книгами, где в названии присутствует слово 'Bookstore':")
+for store, books_list in result_3:
+    print(f"Магазин: {store}, Книги: {', '.join(books_list)}")
+
+
